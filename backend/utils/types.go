@@ -5,7 +5,7 @@ import "github.com/google/uuid"
 type Task struct {
 	ID          uuid.UUID `bson:"id"`
 	Category_id int       `bson:"category_id"`
-	Owner_id    int       `bson:"owner_id"`
+	Owner_id    uuid.UUID `bson:"owner_id"`
 	Title       string    `bson:"title"`
 	Description string    `bson:"description"`
 	Done        bool      `bson:"done"`
