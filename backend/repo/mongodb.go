@@ -5,6 +5,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -46,14 +47,15 @@ func (r *MongoDBRepo) Close() error {
 	return r.client.Disconnect(ctx)
 }
 
-func (r *MongoDBRepo) CreateUser(user utils.User) error {
+func (r *MongoDBRepo) CreateUser(user utils.User) (uuid.UUID, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	user.ID = uuid.New()
 	_, err := r.users.InsertOne(ctx, user)
-	return err
+	return user.ID, err
 }
 
-func (r *MongoDBRepo) GetUser(id int) (utils.User, error) {
+func (r *MongoDBRepo) GetUser(id uuid.UUID) (utils.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var user utils.User
@@ -61,17 +63,17 @@ func (r *MongoDBRepo) GetUser(id int) (utils.User, error) {
 	return user, err
 }
 
-func (r *MongoDBRepo) UpdateUser(id int, user utils.User) error {
+func (r *MongoDBRepo) UpdateUser(id uuid.UUID, user utils.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err := r.users.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": user})
+	_, err := r.users.UpdateOne(ctx, bson.M{"id": id}, bson.M{"$set": user})
 	return err
 }
 
-func (r *MongoDBRepo) DeleteUser(id int) error {
+func (r *MongoDBRepo) DeleteUser(id uuid.UUID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err := r.users.DeleteOne(ctx, bson.M{"_id": id})
+	_, err := r.users.DeleteOne(ctx, bson.M{"id": id})
 	return err
 }
 
@@ -110,21 +112,21 @@ func (r *MongoDBRepo) CreateTask(task utils.Task) error {
 	return err
 }
 
-func (r *MongoDBRepo) UpdateTask(id int, task utils.Task) error {
+func (r *MongoDBRepo) UpdateTask(id uuid.UUID, task utils.Task) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err := r.tasks.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": task})
+	_, err := r.tasks.UpdateOne(ctx, bson.M{"id": id}, bson.M{"$set": task})
 	return err
 }
 
-func (r *MongoDBRepo) DeleteTask(id int) error {
+func (r *MongoDBRepo) DeleteTask(id uuid.UUID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err := r.tasks.DeleteOne(ctx, bson.M{"_id": id})
+	_, err := r.tasks.DeleteOne(ctx, bson.M{"id": id})
 	return err
 }
 
-func (r *MongoDBRepo) GetTasksByOwner(owner_id int) ([]utils.Task, error) {
+func (r *MongoDBRepo) GetTasksByOwner(owner_id uuid.UUID) ([]utils.Task, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var tasks []utils.Task
@@ -171,16 +173,16 @@ func (r *MongoDBRepo) GetCategories() ([]utils.Category, error) {
 	return categories, nil
 }
 
-func (r *MongoDBRepo) DeleteCategory(id int) error {
+func (r *MongoDBRepo) DeleteCategory(id uuid.UUID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err := r.categories.DeleteOne(ctx, bson.M{"_id": id})
+	_, err := r.categories.DeleteOne(ctx, bson.M{"id": id})
 	return err
 }
 
-func (r *MongoDBRepo) UpdateCategory(id int, category utils.Category) error {
+func (r *MongoDBRepo) UpdateCategory(id uuid.UUID, category utils.Category) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err := r.categories.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": category})
+	_, err := r.categories.UpdateOne(ctx, bson.M{"id": id}, bson.M{"$set": category})
 	return err
 }

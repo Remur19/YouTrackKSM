@@ -3,10 +3,13 @@ package categoryservice
 import (
 	"backend/repo"
 	"backend/utils"
+
+	"github.com/google/uuid"
 )
 
 type Category struct {
-	repo repo.MongoDBRepo
+	repo   repo.MongoDBRepo
+	currId int
 }
 
 func NewCategoryService(repo repo.MongoDBRepo) *Category {
@@ -20,13 +23,14 @@ func (c *Category) GetCategories() ([]utils.Category, error) {
 }
 
 func (c *Category) CreateCategory(category utils.Category) error {
+	category.ID = uuid.New()
 	return c.repo.CreateCategory(category)
 }
 
-func (c *Category) UpdateCategory(id int, category utils.Category) error {
+func (c *Category) UpdateCategory(id uuid.UUID, category utils.Category) error {
 	return c.repo.UpdateCategory(id, category)
 }
 
-func (c *Category) DeleteCategory(id int) error {
+func (c *Category) DeleteCategory(id uuid.UUID) error {
 	return c.repo.DeleteCategory(id)
 }

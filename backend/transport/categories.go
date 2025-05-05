@@ -4,8 +4,8 @@ import (
 	"backend/utils"
 	"encoding/json"
 	"net/http"
-	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -36,10 +36,10 @@ func (t *HTTPTransport) GetCategories(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -59,10 +59,10 @@ func (t *HTTPTransport) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

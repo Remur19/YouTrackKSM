@@ -4,8 +4,8 @@ import (
 	"backend/utils"
 	"encoding/json"
 	"net/http"
-	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -15,16 +15,21 @@ func (t *HTTPTransport) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	t.userService.CreateUser(user)
+	id, err := t.userService.CreateUser(user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(id)
 }
 
 func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -40,10 +45,10 @@ func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -59,10 +64,10 @@ func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

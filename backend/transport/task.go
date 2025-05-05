@@ -4,8 +4,8 @@ import (
 	"backend/utils"
 	"encoding/json"
 	"net/http"
-	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -25,7 +25,7 @@ func (t *HTTPTransport) GetTasks(w http.ResponseWriter, r *http.Request) {
 	var (
 		vars = mux.Vars(r)
 		id   string
-		id_i int
+		id_i uuid.UUID
 		ok   bool
 		err  error
 	)
@@ -33,7 +33,7 @@ func (t *HTTPTransport) GetTasks(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-	if id_i, err = strconv.Atoi(id); err != nil {
+	if id_i, err = uuid.Parse(id); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -52,7 +52,7 @@ func (t *HTTPTransport) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	var (
 		vars = mux.Vars(r)
 		id   string
-		id_i int
+		id_i uuid.UUID
 		ok   bool
 		err  error
 	)
@@ -60,7 +60,7 @@ func (t *HTTPTransport) UpdateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-	if id_i, err = strconv.Atoi(id); err != nil {
+	if id_i, err = uuid.Parse(id); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -79,7 +79,7 @@ func (t *HTTPTransport) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	var (
 		vars = mux.Vars(r)
 		id   string
-		id_i int
+		id_i uuid.UUID
 		ok   bool
 		err  error
 	)
@@ -87,7 +87,7 @@ func (t *HTTPTransport) DeleteTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-	if id_i, err = strconv.Atoi(id); err != nil {
+	if id_i, err = uuid.Parse(id); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
