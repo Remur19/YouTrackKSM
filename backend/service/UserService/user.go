@@ -6,7 +6,8 @@ import (
 )
 
 type UserService struct {
-	repo *repo.MongoDBRepo
+	repo   *repo.MongoDBRepo
+	currId int
 }
 
 func NewUserService(repo *repo.MongoDBRepo) *UserService {
@@ -20,6 +21,8 @@ func (u *UserService) GetUser(id int) (utils.User, error) {
 }
 
 func (u *UserService) CreateUser(user utils.User) error {
+	u.currId++
+	user.ID = u.currId
 	return u.repo.CreateUser(user)
 }
 

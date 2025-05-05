@@ -6,7 +6,8 @@ import (
 )
 
 type Category struct {
-	repo repo.MongoDBRepo
+	repo   repo.MongoDBRepo
+	currId int
 }
 
 func NewCategoryService(repo repo.MongoDBRepo) *Category {
@@ -20,6 +21,8 @@ func (c *Category) GetCategories() ([]utils.Category, error) {
 }
 
 func (c *Category) CreateCategory(category utils.Category) error {
+	c.currId++
+	category.ID = c.currId
 	return c.repo.CreateCategory(category)
 }
 

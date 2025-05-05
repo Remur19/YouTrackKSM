@@ -6,7 +6,8 @@ import (
 )
 
 type TaskService struct {
-	repo repo.MongoDBRepo
+	repo   repo.MongoDBRepo
+	currId int
 }
 
 func NewTaskService(repo repo.MongoDBRepo) *TaskService {
@@ -20,6 +21,8 @@ func (ts *TaskService) GetTasksByUser(userID int) ([]utils.Task, error) {
 }
 
 func (ts *TaskService) CreateTask(task utils.Task) error {
+	ts.currId++
+	task.ID = ts.currId
 	return ts.repo.CreateTask(task)
 }
 

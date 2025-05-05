@@ -35,9 +35,9 @@ func (t *HTTPTransport) SetupRoutes() *HTTPTransport {
 	t.mx.HandleFunc("/user/{id}", t.DeleteUser).Methods("DELETE")
 
 	t.mx.HandleFunc("/categories", t.GetCategories).Methods("GET")
-	t.mx.HandleFunc("/categories", t.CreateTask).Methods("POST")
-	t.mx.HandleFunc("/categories/{id}", t.UpdateTask).Methods("PUT")
-	t.mx.HandleFunc("/categories/{id}", t.DeleteTask).Methods("DELETE")
+	t.mx.HandleFunc("/categories", t.CreateCategory).Methods("POST")
+	t.mx.HandleFunc("/categories/{id}", t.UpdateCategory).Methods("PUT")
+	t.mx.HandleFunc("/categories/{id}", t.DeleteCategory).Methods("DELETE")
 
 	t.mx.HandleFunc("/tasks/{id}", t.GetTasks).Methods("GET") // id is the id of the owner
 	t.mx.HandleFunc("/tasks", t.CreateTask).Methods("POST")
