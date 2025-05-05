@@ -1,0 +1,28 @@
+package categoryservice
+
+import (
+	"backend/repo"
+	"backend/utils"
+)
+
+type Category struct {
+	repo repo.MongoDBRepo
+}
+
+func NewCategoryService(repo repo.MongoDBRepo) *Category {
+	return &Category{
+		repo: repo,
+	}
+}
+
+func (c *Category) GetCategories() ([]utils.Category, error) {
+	return c.repo.GetCategories()
+}
+
+func (c *Category) CreateCategory(category utils.Category) error {
+	return c.repo.CreateCategory(category)
+}
+
+func (c *Category) UpdateCategory(id int, category utils.Category) error {
+	return c.repo.UpdateCategory(id, category)
+}
