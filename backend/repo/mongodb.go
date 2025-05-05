@@ -57,7 +57,7 @@ func (r *MongoDBRepo) GetUser(id int) (utils.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var user utils.User
-	err := r.users.FindOne(ctx, bson.M{"_id": id}).Decode(&user)
+	err := r.users.FindOne(ctx, bson.M{"id": id}).Decode(&user)
 	return user, err
 }
 
