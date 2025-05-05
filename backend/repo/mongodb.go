@@ -53,7 +53,7 @@ func (r *MongoDBRepo) CreateUser(user utils.User) error {
 	return err
 }
 
-func (r *MongoDBRepo) GetUser(id string) (utils.User, error) {
+func (r *MongoDBRepo) GetUser(id int) (utils.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var user utils.User
@@ -61,14 +61,14 @@ func (r *MongoDBRepo) GetUser(id string) (utils.User, error) {
 	return user, err
 }
 
-func (r *MongoDBRepo) UpdateUser(id string, user utils.User) error {
+func (r *MongoDBRepo) UpdateUser(id int, user utils.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := r.users.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": user})
 	return err
 }
 
-func (r *MongoDBRepo) DeleteUser(id string) error {
+func (r *MongoDBRepo) DeleteUser(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := r.users.DeleteOne(ctx, bson.M{"_id": id})
@@ -110,7 +110,7 @@ func (r *MongoDBRepo) CreateTask(task utils.Task) error {
 	return err
 }
 
-func (r *MongoDBRepo) UpdateTask(id string, task utils.Task) error {
+func (r *MongoDBRepo) UpdateTask(id int, task utils.Task) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := r.tasks.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": task})
@@ -178,7 +178,7 @@ func (r *MongoDBRepo) DeleteCategory(id string) error {
 	return err
 }
 
-func (r *MongoDBRepo) UpdateCategory(id string, category utils.Category) error {
+func (r *MongoDBRepo) UpdateCategory(id int, category utils.Category) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := r.categories.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": category})
