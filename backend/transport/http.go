@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 type HTTPTransport struct {
@@ -23,6 +24,7 @@ func NewHTTPTransport(userRepo *UserService.UserService, taskRepo *taskservice.T
 		taskService:     taskRepo,
 		categoryService: categoryRepo,
 	}
+
 }
 
 func (t *HTTPTransport) SetupRoutes() *HTTPTransport {
@@ -44,6 +46,7 @@ func (t *HTTPTransport) SetupRoutes() *HTTPTransport {
 	t.mx.HandleFunc("/tasks/{id}", t.UpdateTask).Methods("PUT")
 	t.mx.HandleFunc("/tasks/{id}", t.DeleteTask).Methods("DELETE")
 
+	cors.AllowAll().Handler(t.mx)
 	return t
 }
 
