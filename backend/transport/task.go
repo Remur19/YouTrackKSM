@@ -25,7 +25,7 @@ func (t *HTTPTransport) GetTasks(w http.ResponseWriter, r *http.Request) {
 	var (
 		vars = mux.Vars(r)
 		id   string
-		id_i int
+		id_i uuid.UUID
 		ok   bool
 		err  error
 	)
@@ -52,7 +52,7 @@ func (t *HTTPTransport) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	var (
 		vars = mux.Vars(r)
 		id   string
-		id_i int
+		id_i uuid.UUID
 		ok   bool
 		err  error
 	)
@@ -79,7 +79,7 @@ func (t *HTTPTransport) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	var (
 		vars = mux.Vars(r)
 		id   string
-		id_i int
+		id_i uuid.UUID
 		ok   bool
 		err  error
 	)

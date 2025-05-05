@@ -27,5 +27,7 @@ func main() {
 		taskSvc,
 		catSvc,
 	).SetupRoutes()
-	fmt.Printf("%s", tp.Start(addr))
+
+	fmt.Printf("Server started on addr %s\n", addr)
+	fmt.Printf("%s\n", tp.Start(addr))
 }
