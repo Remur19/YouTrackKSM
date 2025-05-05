@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type Task struct {
 	ID          uuid.UUID `bson:"id"`
-	Category_id int       `bson:"category_id"`
+	Category_id uuid.UUID `bson:"category_id"`
 	Owner_id    uuid.UUID `bson:"owner_id"`
 	Title       string    `bson:"title"`
 	Description string    `bson:"description"`
