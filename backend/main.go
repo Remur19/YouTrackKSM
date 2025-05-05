@@ -6,11 +6,19 @@ import (
 	taskservice "backend/service/TaskService"
 	"backend/service/UserService"
 	"backend/transport"
+	"flag"
 	"fmt"
 )
 
 func main() {
-	repo := repo.NewMongoDBRepo("mongodb://localhost:27016")
+	var (
+		addr  string
+		mongo string
+	)
+	flag.StringVar(&addr, "addr", ":8088", "address to listen on")
+	flag.StringVar(&mongo, "mongo", "mongodb://localhost:27017", "MongoDB connection string")
+	flag.Parse()
+	repo := repo.NewMongoDBRepo(mongo)
 	userSvc := UserService.NewUserService(repo)
 	catSvc := categoryservice.NewCategoryService(*repo)
 	taskSvc := taskservice.NewTaskService(*repo)
@@ -19,5 +27,5 @@ func main() {
 		taskSvc,
 		catSvc,
 	).SetupRoutes()
-	fmt.Printf("%s", tp.Start(":8088"))
+	fmt.Printf("%s", tp.Start(addr))
 }
