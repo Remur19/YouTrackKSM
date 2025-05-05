@@ -15,13 +15,18 @@ func (t *HTTPTransport) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	t.userService.CreateUser(user)
+	id, err := t.userService.CreateUser(user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(id)
 }
 
 func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
 	intId, err = uuid.Parse(id)
@@ -40,7 +45,7 @@ func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
 	intId, err = uuid.Parse(id)
@@ -59,7 +64,7 @@ func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
 	intId, err = uuid.Parse(id)

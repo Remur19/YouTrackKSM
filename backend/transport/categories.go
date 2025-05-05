@@ -36,7 +36,7 @@ func (t *HTTPTransport) GetCategories(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
 	intId, err = uuid.Parse(id)
@@ -59,7 +59,7 @@ func (t *HTTPTransport) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 func (t *HTTPTransport) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (
-		intId int
+		intId uuid.UUID
 		err   error
 	)
 	intId, err = uuid.Parse(id)
