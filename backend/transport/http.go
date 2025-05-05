@@ -33,6 +33,7 @@ func (t *HTTPTransport) SetupRoutes() *HTTPTransport {
 
 	t.mx.HandleFunc("/user", t.CreateUser).Methods("POST")
 	t.mx.HandleFunc("/user/{id}", t.GetUser).Methods("GET")
+	t.mx.HandleFunc("/user", t.GetAllUser).Methods("GET")
 	t.mx.HandleFunc("/user/{id}", t.UpdateUser).Methods("PUT")
 	t.mx.HandleFunc("/user/{id}", t.DeleteUser).Methods("DELETE")
 

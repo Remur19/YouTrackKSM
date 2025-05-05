@@ -23,6 +23,18 @@ func (t *HTTPTransport) CreateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(id)
 }
 
+func (t *HTTPTransport) GetAllUser(w http.ResponseWriter, r *http.Request) {
+	users, err := t.userService.GetAllUsers()
+	if err != nil {
+		http.Error(w, err.Error(), 304)
+		return
+	}
+	if err = json.NewEncoder(w).Encode(users); err != nil {
+		http.Error(w, err.Error(), 304)
+		return
+	}
+}
+
 func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	var (

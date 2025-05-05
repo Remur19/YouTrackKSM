@@ -63,6 +63,20 @@ func (r *MongoDBRepo) GetUser(id uuid.UUID) (utils.User, error) {
 	return user, err
 }
 
+func (r *MongoDBRepo) GetAllUsers() ([]utils.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	var users = []utils.User{}
+	csr, err := r.users.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	if err := csr.All(ctx, users); err != nil {
+		return nil, err
+	}
+	return users, err
+}
+
 func (r *MongoDBRepo) UpdateUser(id uuid.UUID, user utils.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
