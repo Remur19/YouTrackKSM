@@ -1,18 +1,27 @@
 package transport
 
 import (
+	categoryservice "backend/service/CategoryService"
+	taskservice "backend/service/TaskService"
+	"backend/service/UserService"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
 type HTTPTransport struct {
-	mx *mux.Router
+	mx              *mux.Router
+	userService     *UserService.UserService
+	taskService     *taskservice.TaskService
+	categoryService *categoryservice.Category
 }
 
-func NewHTTPTransport() *HTTPTransport {
+func NewHTTPTransport(userRepo *UserService.UserService, taskRepo *taskservice.TaskService, categoryRepo *categoryservice.Category) *HTTPTransport {
 	return &HTTPTransport{
-		mx: mux.NewRouter(),
+		mx:              mux.NewRouter(),
+		userService:     userRepo,
+		taskService:     taskRepo,
+		categoryService: categoryRepo,
 	}
 }
 
