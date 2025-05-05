@@ -117,7 +117,7 @@ func (r *MongoDBRepo) UpdateTask(id int, task utils.Task) error {
 	return err
 }
 
-func (r *MongoDBRepo) DeleteTask(id string) error {
+func (r *MongoDBRepo) DeleteTask(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := r.tasks.DeleteOne(ctx, bson.M{"_id": id})
