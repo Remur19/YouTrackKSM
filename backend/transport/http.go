@@ -29,6 +29,21 @@ func (t *HTTPTransport) SetupRoutes() *HTTPTransport {
 	t.mx.HandleFunc("/health", t.healthHandler).Methods("GET")
 	t.mx.HandleFunc("/version", t.versionHandler).Methods("GET")
 
+	t.mx.HandleFunc("/user", t.CreateUser).Methods("POST")
+	t.mx.HandleFunc("/user/{id}", t.GetUser).Methods("GET")
+	t.mx.HandleFunc("/user/{id}", t.UpdateUser).Methods("PUT")
+	t.mx.HandleFunc("/user/{id}", t.DeleteUser).Methods("DELETE")
+
+	t.mx.HandleFunc("/categories", t.GetCategories).Methods("GET")
+	t.mx.HandleFunc("/categories", t.CreateTask).Methods("POST")
+	t.mx.HandleFunc("/categories/{id}", t.UpdateTask).Methods("PUT")
+	t.mx.HandleFunc("/categories/{id}", t.DeleteTask).Methods("DELETE")
+
+	t.mx.HandleFunc("/tasks/{id}", t.GetTasks).Methods("GET") // id is the id of the owner
+	t.mx.HandleFunc("/tasks", t.CreateTask).Methods("POST")
+	t.mx.HandleFunc("/tasks/{id}", t.UpdateTask).Methods("PUT")
+	t.mx.HandleFunc("/tasks/{id}", t.DeleteTask).Methods("DELETE")
+
 	return t
 }
 

@@ -10,14 +10,14 @@ import (
 )
 
 func main() {
-	repo := repo.NewMongoDBRepo("mongodb://localhost:27017")
+	repo := repo.NewMongoDBRepo("mongodb://localhost:27016")
 	userSvc := UserService.NewUserService(repo)
 	catSvc := categoryservice.NewCategoryService(*repo)
 	taskSvc := taskservice.NewTaskService(*repo)
 	tp := transport.NewHTTPTransport(
 		userSvc,
-		catSvc,
 		taskSvc,
+		catSvc,
 	).SetupRoutes()
 	fmt.Printf("%s", tp.Start(":8088"))
 }

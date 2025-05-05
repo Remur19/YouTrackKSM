@@ -26,3 +26,7 @@ func (ts *TaskService) CreateTask(task utils.Task) error {
 func (ts *TaskService) UpdateTask(taskID int, task utils.Task) error {
 	return ts.repo.UpdateTask(taskID, task)
 }
+
+func (ts *TaskService) DeleteTask(taskID int) error {
+	return ts.repo.DeleteTask(taskID)
+}
