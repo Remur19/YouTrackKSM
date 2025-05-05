@@ -9,5 +9,4 @@ export interface Task {
 export interface Category {
     id: number;
     name: string;
-
 }
