@@ -1,0 +1,71 @@
+package transport
+
+import (
+	"backend/utils"
+	"encoding/json"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+)
+
+func (t *HTTPTransport) CreateUser(w http.ResponseWriter, r *http.Request) {
+	var user utils.User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	t.userService.CreateUser(user)
+}
+
+func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	var (
+		intId int
+		err   error
+	)
+	intId, err = strconv.Atoi(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	user, err := t.userService.GetUser(intId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(user)
+}
+
+func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	var (
+		intId int
+		err   error
+	)
+	intId, err = strconv.Atoi(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	var user utils.User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	t.userService.UpdateUser(intId, user)
+}
+
+func (t *HTTPTransport) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	var (
+		intId int
+		err   error
+	)
+	intId, err = strconv.Atoi(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	t.userService.DeleteUser(intId)
+}
