@@ -24,8 +24,8 @@ const (
 	DBName                 = "todo"
 )
 
-func NewMongoDBRepo() *MongoDBRepo {
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
+func NewMongoDBRepo(connString string) *MongoDBRepo {
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(connString))
 	if err != nil {
 		panic(err)
 	}
@@ -171,7 +171,7 @@ func (r *MongoDBRepo) GetCategories() ([]utils.Category, error) {
 	return categories, nil
 }
 
-func (r *MongoDBRepo) DeleteCategory(id string) error {
+func (r *MongoDBRepo) DeleteCategory(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := r.categories.DeleteOne(ctx, bson.M{"_id": id})

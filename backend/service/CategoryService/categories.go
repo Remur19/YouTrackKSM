@@ -26,3 +26,7 @@ func (c *Category) CreateCategory(category utils.Category) error {
 func (c *Category) UpdateCategory(id int, category utils.Category) error {
 	return c.repo.UpdateCategory(id, category)
 }
+
+func (c *Category) DeleteCategory(id int) error {
+	return c.repo.DeleteCategory(id)
+}
