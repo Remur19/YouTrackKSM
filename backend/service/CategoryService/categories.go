@@ -3,6 +3,8 @@ package categoryservice
 import (
 	"backend/repo"
 	"backend/utils"
+
+	"github.com/google/uuid"
 )
 
 type Category struct {
@@ -21,8 +23,7 @@ func (c *Category) GetCategories() ([]utils.Category, error) {
 }
 
 func (c *Category) CreateCategory(category utils.Category) error {
-	c.currId++
-	category.ID = c.currId
+	category.ID = uuid.New()
 	return c.repo.CreateCategory(category)
 }
 

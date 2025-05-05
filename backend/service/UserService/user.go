@@ -3,6 +3,8 @@ package UserService
 import (
 	"backend/repo"
 	"backend/utils"
+
+	"github.com/google/uuid"
 )
 
 type UserService struct {
@@ -21,8 +23,7 @@ func (u *UserService) GetUser(id int) (utils.User, error) {
 }
 
 func (u *UserService) CreateUser(user utils.User) error {
-	u.currId++
-	user.ID = u.currId
+	user.ID = uuid.New()
 	return u.repo.CreateUser(user)
 }
 

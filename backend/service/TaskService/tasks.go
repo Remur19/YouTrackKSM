@@ -3,11 +3,12 @@ package taskservice
 import (
 	"backend/repo"
 	"backend/utils"
+
+	"github.com/google/uuid"
 )
 
 type TaskService struct {
-	repo   repo.MongoDBRepo
-	currId int
+	repo repo.MongoDBRepo
 }
 
 func NewTaskService(repo repo.MongoDBRepo) *TaskService {
@@ -21,8 +22,7 @@ func (ts *TaskService) GetTasksByUser(userID int) ([]utils.Task, error) {
 }
 
 func (ts *TaskService) CreateTask(task utils.Task) error {
-	ts.currId++
-	task.ID = ts.currId
+	task.ID = uuid.New()
 	return ts.repo.CreateTask(task)
 }
 
