@@ -4,8 +4,8 @@ import (
 	"backend/utils"
 	"encoding/json"
 	"net/http"
-	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -24,7 +24,7 @@ func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
 		intId int
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -43,7 +43,7 @@ func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		intId int
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -62,7 +62,7 @@ func (t *HTTPTransport) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		intId int
 		err   error
 	)
-	intId, err = strconv.Atoi(id)
+	intId, err = uuid.Parse(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
