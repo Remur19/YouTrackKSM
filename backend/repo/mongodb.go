@@ -25,10 +25,10 @@ const (
 	DBName                 = "todo"
 )
 
-func NewMongoDBRepo(connString string) *MongoDBRepo {
+func NewMongoDBRepo(connString string) (*MongoDBRepo, error) {
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(connString))
 	if err != nil {
-		panic(err)
+		return &MongoDBRepo{}, err
 	}
 	db := client.Database(DBName)
 	users := db.Collection(UserCollectionName)
@@ -38,7 +38,7 @@ func NewMongoDBRepo(connString string) *MongoDBRepo {
 		users:      users,
 		categories: categories,
 		tasks:      tasks,
-	}
+	}, nil
 }
 
 func (r *MongoDBRepo) Close() error {
