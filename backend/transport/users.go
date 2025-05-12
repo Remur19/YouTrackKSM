@@ -20,7 +20,10 @@ func (t *HTTPTransport) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(id)
+	if err := json.NewEncoder(w).Encode(id); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 
@@ -52,7 +55,9 @@ func (t *HTTPTransport) GetUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(user)
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +76,10 @@ func (t *HTTPTransport) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	t.userService.UpdateUser(intId, user)
+	if err := t.userService.UpdateUser(intId, user); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (t *HTTPTransport) DeleteUser(w http.ResponseWriter, r *http.Request) {
@@ -85,5 +93,8 @@ func (t *HTTPTransport) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	t.userService.DeleteUser(intId)
+	if err := t.userService.DeleteUser(intId); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

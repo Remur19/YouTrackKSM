@@ -5,24 +5,44 @@ name: Go
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.23'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23"
 
-    - name: Test
-      run: cd backend; go test -v ./...
+      - name: Test
+        run: cd backend; go test -v ./...
 
-    - name: Lint
-      run: cd backend; go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23"
+
+      - name: Lint
+        run: cd backend; go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run
+
+  sonar:
+    runs-on: ubuntu-latest
+    container:
+      image: sonarsource/sonar-scanner-cli:4
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Scan container
+        run: |
+          sonar-scanner -Dsonar.projectKey=KMS_backend -Dsonar.sources=. -Dsonar.host.url=https://scm.thm.de/sonar -Dsonar.login=${{ secrets.backendscq }}

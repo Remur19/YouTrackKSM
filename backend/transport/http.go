@@ -55,7 +55,11 @@ func (t *HTTPTransport) healthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *HTTPTransport) versionHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("v1.0.0"))
+	_, err := w.Write([]byte("v1.0.0"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 }
 

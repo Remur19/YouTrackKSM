@@ -8,8 +8,7 @@ import (
 )
 
 type Category struct {
-	repo   repo.MongoDBRepo
-	currId int
+	repo repo.MongoDBRepo
 }
 
 func NewCategoryService(repo repo.MongoDBRepo) *Category {
