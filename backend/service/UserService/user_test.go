@@ -30,8 +30,8 @@ func TestGetAllUsers(t *testing.T) {
 	mr := repo.NewMockRepo()
 	us := NewUserService(mr)
 
-	us.CreateUser(utils.User{})
-	us.CreateUser(utils.User{})
+	_, _ = us.CreateUser(utils.User{})
+	_, _ = us.CreateUser(utils.User{})
 
 	users, err := us.GetAllUsers()
 	if err != nil {
