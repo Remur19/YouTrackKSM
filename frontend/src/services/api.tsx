@@ -76,7 +76,7 @@ export async function deleteTask(id: string): Promise<void> {
 
 // --- Kategorien (Categories) ---
 
-export async function getAllCategories(userId: number): Promise<Category[]> {
+export async function getAllCategories(userId: number): Promise<Category[]> { //Niklas
     try {
         const response = await fetch(`${BASE_URL}/categories/${userId}`, {
             method: 'GET',
@@ -92,7 +92,7 @@ export async function getAllCategories(userId: number): Promise<Category[]> {
     }
 }
 
-export async function createCategory(category: Category): Promise<void> {
+export async function createCategory(category: Category): Promise<void> {// Leo
     try {
         const response = await fetch(`${BASE_URL}/categories`, {
             method: 'POST',
