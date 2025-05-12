@@ -8,8 +8,7 @@ import (
 )
 
 type UserService struct {
-	repo   *repo.MongoDBRepo
-	currId int
+	repo *repo.MongoDBRepo
 }
 
 func NewUserService(repo *repo.MongoDBRepo) *UserService {
