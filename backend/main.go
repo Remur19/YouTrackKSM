@@ -18,7 +18,7 @@ func main() {
 	flag.StringVar(&addr, "addr", ":8088", "address to listen on")
 	flag.StringVar(&mongo, "mongo", "mongodb://localhost:27017", "MongoDB connection string")
 	flag.Parse()
-	repo := repo.NewMongoDBRepo(mongo)
+	repo, _ := repo.NewMongoDBRepo(mongo)
 	userSvc := UserService.NewUserService(repo)
 	catSvc := categoryservice.NewCategoryService(*repo)
 	taskSvc := taskservice.NewTaskService(*repo)
