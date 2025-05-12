@@ -20,8 +20,8 @@ func main() {
 	flag.Parse()
 	repo, _ := repo.NewMongoDBRepo(mongo)
 	userSvc := UserService.NewUserService(repo)
-	catSvc := categoryservice.NewCategoryService(*repo)
-	taskSvc := taskservice.NewTaskService(*repo)
+	catSvc := categoryservice.NewCategoryService(repo)
+	taskSvc := taskservice.NewTaskService(repo)
 	tp := transport.NewHTTPTransport(
 		userSvc,
 		taskSvc,

@@ -8,10 +8,10 @@ import (
 )
 
 type UserService struct {
-	repo *repo.MongoDBRepo
+	repo repo.Repository
 }
 
-func NewUserService(repo *repo.MongoDBRepo) *UserService {
+func NewUserService(repo repo.Repository) *UserService {
 	return &UserService{
 		repo: repo,
 	}
@@ -21,9 +21,8 @@ func (u *UserService) GetUser(id uuid.UUID) (utils.User, error) {
 	return u.repo.GetUser(id)
 }
 
-
 func (u *UserService) GetAllUsers() ([]utils.User, error) {
-	return u.repo.GetAllUsers()
+	return u.repo.GetUsers()
 }
 
 func (u *UserService) CreateUser(user utils.User) (uuid.UUID, error) {

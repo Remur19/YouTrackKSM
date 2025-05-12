@@ -25,8 +25,7 @@ const (
 	DBName                 = "todo"
 )
 
-
-func NewMongoDBRepo(connString string) (*MongoDBRepo, error) {
+func NewMongoDBRepo(connString string) (Repository, error) {
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(connString))
 	if err != nil {
 		return &MongoDBRepo{}, err
@@ -39,7 +38,6 @@ func NewMongoDBRepo(connString string) (*MongoDBRepo, error) {
 		users:      users,
 		categories: categories,
 		tasks:      tasks,
-
 	}, nil
 }
 
@@ -65,8 +63,7 @@ func (r *MongoDBRepo) GetUser(id uuid.UUID) (utils.User, error) {
 	return user, err
 }
 
-
-func (r *MongoDBRepo) GetAllUsers() ([]utils.User, error) {
+func (r *MongoDBRepo) GetUsers() ([]utils.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var users = []utils.User{}
@@ -100,26 +97,6 @@ func (r *MongoDBRepo) GetUserByEmail(email string) (utils.User, error) {
 	var user utils.User
 	err := r.users.FindOne(ctx, bson.M{"email": email}).Decode(&user)
 	return user, err
-}
-
-func (r *MongoDBRepo) GetUsers() ([]utils.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	var users []utils.User
-	cursor, err := r.users.Find(ctx, bson.M{})
-	if err != nil {
-		return nil, err
-	}
-	defer cursor.Close(ctx)
-	for cursor.Next(ctx) {
-		var user utils.User
-		err := cursor.Decode(&user)
-		if err != nil {
-			return nil, err
-		}
-		users = append(users, user)
-	}
-	return users, nil
 }
 
 func (r *MongoDBRepo) CreateTask(task utils.Task) error {

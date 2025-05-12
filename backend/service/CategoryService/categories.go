@@ -8,10 +8,10 @@ import (
 )
 
 type Category struct {
-	repo repo.MongoDBRepo
+	repo repo.Repository
 }
 
-func NewCategoryService(repo repo.MongoDBRepo) *Category {
+func NewCategoryService(repo repo.Repository) *Category {
 	return &Category{
 		repo: repo,
 	}

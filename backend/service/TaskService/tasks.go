@@ -8,10 +8,10 @@ import (
 )
 
 type TaskService struct {
-	repo repo.MongoDBRepo
+	repo repo.Repository
 }
 
-func NewTaskService(repo repo.MongoDBRepo) *TaskService {
+func NewTaskService(repo repo.Repository) *TaskService {
 	return &TaskService{
 		repo: repo,
 	}
