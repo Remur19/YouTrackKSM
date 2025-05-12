@@ -23,3 +23,6 @@ jobs:
 
     - name: Test
       run: cd backend; go test -v ./...
+
+    - name: Lint
+      run: cd backend; go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run
