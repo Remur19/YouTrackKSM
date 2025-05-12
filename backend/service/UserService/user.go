@@ -22,6 +22,11 @@ func (u *UserService) GetUser(id uuid.UUID) (utils.User, error) {
 	return u.repo.GetUser(id)
 }
 
+
+func (u *UserService) GetAllUsers() ([]utils.User, error) {
+	return u.repo.GetAllUsers()
+}
+
 func (u *UserService) CreateUser(user utils.User) (uuid.UUID, error) {
 	user.ID = uuid.New()
 	return u.repo.CreateUser(user)

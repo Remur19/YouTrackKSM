@@ -25,10 +25,11 @@ const (
 	DBName                 = "todo"
 )
 
-func NewMongoDBRepo(connString string) *MongoDBRepo {
+
+func NewMongoDBRepo(connString string) (*MongoDBRepo, error) {
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(connString))
 	if err != nil {
-		panic(err)
+		return &MongoDBRepo{}, err
 	}
 	db := client.Database(DBName)
 	users := db.Collection(UserCollectionName)
@@ -38,7 +39,8 @@ func NewMongoDBRepo(connString string) *MongoDBRepo {
 		users:      users,
 		categories: categories,
 		tasks:      tasks,
-	}
+
+	}, nil
 }
 
 func (r *MongoDBRepo) Close() error {
@@ -61,6 +63,21 @@ func (r *MongoDBRepo) GetUser(id uuid.UUID) (utils.User, error) {
 	var user utils.User
 	err := r.users.FindOne(ctx, bson.M{"id": id}).Decode(&user)
 	return user, err
+}
+
+
+func (r *MongoDBRepo) GetAllUsers() ([]utils.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	var users = []utils.User{}
+	csr, err := r.users.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	if err := csr.All(ctx, users); err != nil {
+		return nil, err
+	}
+	return users, err
 }
 
 func (r *MongoDBRepo) UpdateUser(id uuid.UUID, user utils.User) error {
