@@ -16,6 +16,12 @@ type MockRepo struct {
 	mu         sync.RWMutex
 }
 
+var (
+	ERROR_USER_NOT_FOUND     = errors.New("user not found")
+	ERROR_TASK_NOT_FOUND     = errors.New("task not found")
+	ERROR_CATEGORY_NOT_FOUND = errors.New("category")
+)
+
 func NewMockRepo() Repository {
 	return &MockRepo{
 		users:      make(map[uuid.UUID]utils.User),
@@ -39,7 +45,7 @@ func (m *MockRepo) GetUser(id uuid.UUID) (utils.User, error) {
 	defer m.mu.RUnlock()
 	user, ok := m.users[id]
 	if !ok {
-		return utils.User{}, errors.New("user not found")
+		return utils.User{}, ERROR_USER_NOT_FOUND
 	}
 	return user, nil
 }
@@ -48,7 +54,7 @@ func (m *MockRepo) UpdateUser(id uuid.UUID, user utils.User) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if _, ok := m.users[id]; !ok {
-		return errors.New("user not found")
+		return ERROR_USER_NOT_FOUND
 	}
 	user.ID = id
 	m.users[id] = user
@@ -70,7 +76,7 @@ func (m *MockRepo) GetUserByEmail(email string) (utils.User, error) {
 			return user, nil
 		}
 	}
-	return utils.User{}, errors.New("user not found")
+	return utils.User{}, ERROR_USER_NOT_FOUND
 }
 
 func (m *MockRepo) GetUsers() ([]utils.User, error) {
@@ -97,7 +103,7 @@ func (m *MockRepo) UpdateTask(id uuid.UUID, task utils.Task) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if _, ok := m.tasks[id]; !ok {
-		return errors.New("task not found")
+		return ERROR_TASK_NOT_FOUND
 	}
 	task.ID = id
 	m.tasks[id] = task
@@ -137,7 +143,7 @@ func (m *MockRepo) UpdateCategory(id uuid.UUID, category utils.Category) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if _, ok := m.categories[id]; !ok {
-		return errors.New("category not found")
+		return ERROR_CATEGORY_NOT_FOUND
 	}
 	category.ID = id
 	m.categories[id] = category
