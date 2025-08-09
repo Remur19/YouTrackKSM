@@ -6,7 +6,7 @@ services:
   backend:
     build: .
     ports:
-      - "8080:8080"
+      - "27017:27017"
     depends_on:
       - mongo
     networks:
