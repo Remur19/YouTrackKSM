@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {createUser} from "../services/api";
 
 interface TaskProps {
   name: string;
@@ -10,7 +11,13 @@ const TaskEditModule: React.FC<TaskProps> = ({ name, tag }) => {
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-
+    useEffect(() => {
+        debugger;
+        const createDummyUser = async  (p0: { name: string; password: string,email:string})=>  {
+            await createUser(p0)
+        }
+        createDummyUser({name:"Jim",password:"test",email:"test@test.de"});
+    })
   return (
     <>
       <button
@@ -25,8 +32,8 @@ const TaskEditModule: React.FC<TaskProps> = ({ name, tag }) => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-lg font-bold mb-2">Edit Task</h2>
             <p className="mb-4 text-sm text-gray-600">
-              Name: <strong>{name}</strong><br />
-              Tag: <strong>{tag}</strong>
+              Name: <strong>{name}</strong><input/><br />
+              Tag: <strong>{tag}</strong><input/>
             </p>
             <button
               className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"

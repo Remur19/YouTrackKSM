@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Textfield from './components/Textfield';
 import Task from './components/Task';
+import {createUser} from "./services/api";
 
 function App() {
   const [task, setTask] = useState('');
@@ -10,8 +11,10 @@ function App() {
     e.preventDefault();
     if (!task.trim()) return;
     setTasks([...tasks, task]);
+
     setTask('');
   };
+
 
   return (
     <div className="p-4">
