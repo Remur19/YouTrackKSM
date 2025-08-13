@@ -15,7 +15,7 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "dist",
-    "types": ["jest", "node"]
+    "types": ["jest", "@testing-library/jest-dom", "node"]
   },
   "include": ["src", "__tests__","vite.config.ts", "@testing-library/jest-dom"]
 }

@@ -21,6 +21,7 @@
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@sonar/scan": "^4.3.0",
+    "@testing-library/jest-dom": "^6.7.0",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",

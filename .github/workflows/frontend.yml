@@ -2,13 +2,9 @@ name: frontend
 
 on:
   push:
-    branches:
-      - main
-      - test_leonhard
+    branches: [ main, test_leonhard ]
   pull_request:
-    branches:
-      - main
-      - test_leonhard
+    branches: [ main, test_leonhard ]
 
 jobs:
   frontend:
@@ -19,13 +15,22 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
+
       - run: npm ci
+
+      # Optional: quick sanity check the dependency is present
+      - run: npm ls @testing-library/jest-dom || true
+
       - run: npm run test:ci || npm test -- --ci --runInBand
+        env:
+          NODE_ENV: development
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
