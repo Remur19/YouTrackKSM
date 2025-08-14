@@ -65,4 +65,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Scan container
         run: |
-          sonar-scanner -Dsonar.projectKey=KMS_backend -Dsonar.sources=. -Dsonar.host.url=https://scm.thm.de/sonar -Dsonar.login=${{ secrets.backendscq }}
+          sonar-scanner \
+            -Dsonar.projectKey=KMS_backend \
+            -Dsonar.host.url=https://scm.thm.de/sonar \
+            -Dsonar.login=${{ secrets.backendscq }} \
+            -Dsonar.projectBaseDir=frontend \
+            -Dsonar.sources=src \
+            -Dsonar.tests=src \
+            -Dsonar.test.inclusions="**/*.test.ts,**/*.test.tsx" \
+            -Dsonar.exclusions="**/node_modules/**,**/dist/**,**/build/**,**/coverage/**" \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+            -Dsonar.typescript.tsconfigPath=tsconfig.json
