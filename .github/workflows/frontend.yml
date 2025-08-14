@@ -55,3 +55,14 @@ jobs:
       - run: npm ci
       - name: Run ESLint
         run: npm run lint
+
+  sonar:
+    runs-on: ubuntu-latest
+    container:
+      image: sonarsource/sonar-scanner-cli:4
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Scan container
+        run: |
+          sonar-scanner -Dsonar.projectKey=KMS_backend -Dsonar.sources=. -Dsonar.host.url=https://scm.thm.de/sonar -Dsonar.login=${{ secrets.backendscq }}
