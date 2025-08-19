@@ -1,5 +1,4 @@
 import React from 'react';
-import x from '../assets/react.svg';
 
 interface TextfieldProps{
     type: string;
