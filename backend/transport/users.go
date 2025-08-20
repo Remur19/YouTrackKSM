@@ -7,7 +7,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	"fmt"
 )
 
 func (t *HTTPTransport) CreateUser(w http.ResponseWriter, r *http.Request) {
