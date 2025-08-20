@@ -1,3 +1,4 @@
+
 package taskservice
 
 import (
@@ -25,14 +26,20 @@ func TestCreateTask(t *testing.T) {
 func TestGetTasksByUser(t *testing.T) {
 	userID := uuid.New()
 
-	taskService.CreateTask(utils.Task{
+	err := taskService.CreateTask(utils.Task{
 		Title:    "UserTask1",
 		Owner_id: userID,
 	})
-	taskService.CreateTask(utils.Task{
+	if err != nil {
+		panic(err)
+	}
+	err = taskService.CreateTask(utils.Task{
 		Title:    "UserTask2",
 		Owner_id: userID,
 	})
+	if err != nil {
+		panic(err)
+	}
 
 	tasks, err := taskService.GetTasksByUser(userID)
 	if err != nil || len(tasks) != 2 {
