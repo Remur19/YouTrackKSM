@@ -167,7 +167,7 @@ export async function createUser(user:Omit<User, 'id'>): Promise<User> {
     return fullUser;
 }
 
-export async function getUser(id: number): Promise<User> {
+export async function getUser(id: string): Promise<User> {
     const response = await fetch(`${BASE_URL}/user/${id}`, {
         method: 'GET'
     });
