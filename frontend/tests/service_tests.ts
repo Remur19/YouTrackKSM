@@ -1,39 +1,38 @@
-import * as api from "../src/services/api";
-import { type User } from '../src/types';
 import { getUser, createUser } from "../src/services/api";
+
+
 
 describe("getUser", () => {
     beforeEach(() => {
         jest.resetAllMocks();
     });
 
+
     test("Abfrage erfolgreich", async () => {
         const userId = "7d4c5a7e-6624-4f53-a9b6-6ffdeef7987b";
-        const mockUser = { id: userId };
+        const mockUser = {id: userId} ;
 
         global.fetch = jest.fn().mockResolvedValue({
             ok: true,
             json: async () => mockUser,
-        } as any);
-
+        } as Response);
+        
+        //uuid.Parse(userId)
         const user = await getUser(userId);
 
         expect(user).toEqual(mockUser);
-        expect(fetch).toHaveBeenCalledWith(
-            `http://localhost:8080/user/${userId}`,
-            { method: "GET" }
-        );
+        expect(fetch).toHaveBeenCalledWith(`http://localhost:8080/user/${userId}`, {method: "GET"});
     });
 
     test("Abfrage nicht erfolgreich", async () => {
         global.fetch = jest.fn().mockResolvedValue({
             ok: false,
             statusText: "Not Found",
-        } as any);
+        } as Response);
 
-        await expect(
-            getUser("7d4c5a7e-6624-4f53-a9b6-6ffdeef7987a")
-        ).rejects.toThrow("Fehler beim Abrufen des Nutzers: Not Found");
+        await expect(getUser("7d4c5a7e-6624-4f53-a9b6-6ffdeef7987a"))
+            .rejects
+            .toThrow("Fehler beim Abrufen des Nutzers: Not Found");
     });
 });
 
@@ -49,8 +48,8 @@ describe("createUser", () => {
         global.fetch = jest.fn().mockResolvedValue({
             ok: true,
             statusText: "OK",
-            json: async () => returnedId,  // ✅ return number, not object
-        } as any);
+            json: async () => returnedId,
+        } as Response);
 
         const result = await createUser(newUser);
 
@@ -73,7 +72,7 @@ describe("createUser", () => {
             ok: false,
             statusText: "Bad Request",
             json: async () => ({}),
-        } as any);
+        } as Response);
 
         await expect(createUser(newUser))
             .rejects
@@ -89,4 +88,5 @@ describe("createUser", () => {
             .rejects
             .toThrow("Network down");
     });
+
 });
