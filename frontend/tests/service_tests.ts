@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import * as api from "../src/services/api";
 import {type User} from '../src/types';
 import { getUser, createUser } from "../src/services/api";
 
 
 /*test("create a new task", async () => {
+=======
+test("create a new task", async () => {
+>>>>>>> 8d3b963d62757f74f516fd7d9a3eaedd9dee9f29
     
 })*/
 
