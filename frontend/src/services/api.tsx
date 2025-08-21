@@ -1,7 +1,7 @@
 import {type Task, type User} from '../types';
 import { type Category } from '../types';
 
-const BASE_URL = 'http://localhost:8080';
+export const BASE_URL = 'http://localhost:8080';
 
 // --- Aufgaben (Tasks) ---
 
@@ -147,7 +147,7 @@ export async function deleteCategory(id: string): Promise<void> {
 
 
 export async function createUser(user:Omit<User, 'id'>): Promise<User> {
-    console.log(JSON.stringify(user));
+  //  console.log(JSON.stringify(user));
 
     const response = await fetch(`${BASE_URL}/user`, {
         method: 'POST',
@@ -180,7 +180,7 @@ export async function getUser(id: string): Promise<User> {
 }
 
 export async function updateUser(user: User): Promise<void> {
-    console.log(JSON.stringify(user));
+    //console.log(JSON.stringify(user));
     const response = await fetch(`${BASE_URL}/user/${user.id}`, {
         method: 'PUT',
         headers: {

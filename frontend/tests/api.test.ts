@@ -1,4 +1,4 @@
-import {getUser, createUser, getAllCategories} from "../src/services/api";
+import {getUser, createUser, getAllCategories, BASE_URL} from "../src/services/api";
 import {Category} from "../src/types";
 
 
@@ -92,7 +92,12 @@ describe("createUser", () => {
 
 });
 describe("getAllCategories", () => {
-
+    beforeEach(() => {
+        global.fetch = jest.fn();
+    });
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
     const fakeCategoies :Category[] =[{
         name: "testCat1",
         id: 1,
@@ -125,7 +130,29 @@ describe("getAllCategories", () => {
             const categories =fakeCategoies;
             expect(categories.length).toBeGreaterThan(0);
             expect(categories[0]).toHaveProperty("name");
+            expect(categories[0]).toHaveProperty("user_id");
+            expect(categories[0]).toHaveProperty("id");
         })
+        test("check that getAllCategories calls fetch with correct params", async () => {
+            await getAllCategories(1);
+
+            expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/categories`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+        });
+        test("should throw an error if response is not ok", async () => {
+            // fetch resolved, aber mit schlechtem Status
+            (fetch as jest.Mock).mockResolvedValueOnce({
+                ok: false,
+                status: 500,
+                json: async () => ([]),
+            });
+
+            await expect(getAllCategories(1))
+                .rejects.toThrow("Fehler beim Abrufen der Kategorien: undefined");
+        });
     }
 
 })
