@@ -1,5 +1,5 @@
-import { createCategory, createTask, createUser, deleteUser, editTask, getUser } from "../services/api";
-import type { Category, Task } from "../types";
+import { createCategory, createTask, createUser, deleteUser, editTask, getUser,updateUser, editCategory } from "../services/api";
+import type { Category, Task,User} from "../types";
 
 
 
@@ -202,7 +202,115 @@ describe('editTask', () => {
 });
 
 
+describe('updateUser', () => {
+  beforeEach(() => {
+    (fetch as jest.Mock).mockClear();
+  });
 
+  it('sollte einen Nutzer erfolgreich aktualisieren', async () => {
+    
+    const newUser = { name: 'Max Mustermann', email: "max.mustermann@gmail.com", password: "pw12334444" };
+    
+    
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => 1, 
+    });
+
+    const createdUser = await createUser(newUser);
+
+    
+    const updatedUser: User = { ...createdUser, name: 'Max Mustermann Updated' };
+
+    
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+    });
+
+    await expect(updateUser(updatedUser)).resolves.toBeUndefined();
+
+    expect(fetch).toHaveBeenCalledWith(`http://localhost:8080/user/${updatedUser.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedUser),
+    });
+  });
+
+  it('sollte einen Fehler werfen, wenn PUT fehlschlägt', async () => {
+    const mockUser: User = { id: 999, name: 'Non-existent User', email: "test@test.com", password: "pw123" };
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      statusText: 'Not Found',
+    });
+
+    await expect(updateUser(mockUser)).rejects.toThrow(
+      'Fehler beim Aktualisieren des Nutzers: Not Found'
+    );
+  });
+});
+
+
+describe('editCategory', () => {
+  beforeEach(() => {
+    (fetch as jest.Mock).mockClear();
+  });
+
+  it('sollte eine Kategorie erfolgreich aktualisieren', async () => {
+    
+    const newUser = { name: 'Category User', email: "categoryuser@test.com", password: "pw123" };
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => 1,
+    });
+    const createdUser = await createUser(newUser);
+
+    
+    const newCategory: Category = { name: 'Test Category', user_id: createdUser.id,id:1 };
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+    });
+    await createCategory(newCategory);
+
+  
+    const categoryToEdit: Category = { 
+      id: 1, 
+      name: 'Updated Category', 
+      user_id: createdUser.id 
+    };
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+    });
+
+    await expect(editCategory(categoryToEdit)).resolves.toBeUndefined();
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8080/categories/1', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(categoryToEdit),
+    });
+  });
+
+  it('sollte einen Fehler werfen, wenn PUT fehlschlägt', async () => {
+    const mockCategory: Category = { id: 999, name: 'Non-existent Category', user_id: 1 };
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      statusText: 'Not Found',
+    });
+
+    await expect(editCategory(mockCategory)).rejects.toThrow('Fehler beim Aktualisieren: Not Found');
+  });
+
+  it('sollte Fehler aus catch weiterwerfen', async () => {
+    const mockCategory: Category = { id: 1, name: 'Test Category', user_id: 1 };
+
+    (fetch as jest.Mock).mockRejectedValueOnce(new Error('Netzwerkfehler'));
+
+    await expect(editCategory(mockCategory)).rejects.toThrow('Netzwerkfehler');
+  });
+});
 
 
 
