@@ -1,5 +1,5 @@
-import { createCategory, createTask, createUser, deleteUser, editCategory, editTask, getUser, updateUser } from "../services/api";
-import type { Category, Task, User } from "../types";
+import { createCategory, createTask, createUser, deleteUser, editTask, getUser } from "../services/api";
+import type { Category, Task } from "../types";
 
 
 
@@ -122,4 +122,82 @@ describe('deleteUser', () => {
   });
 });
 
+
+
+describe('editTask', () => {
+  beforeEach(() => {
+    (fetch as jest.Mock).mockClear();
+  });
+
+  it('sollte eine Task erfolgreich aktualisieren', async () => {
+    
+    const newUser = { name: 'Task User', email: "taskuser@test.com", password: "pw123" };
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => 1,
+    });
+    const createdUser = await createUser(newUser);
+
+    
+    const newCategory: Category = { name: 'Test Category', user_id: createdUser.id , id:1};
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+    });
+    await createCategory(newCategory);
+
+    
+    const newTask: Task = { 
+      title: 'Test Task', 
+      description: "Test Description", 
+      category_id: 1, 
+      id:1,
+      done: false 
+    };
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+    });
+    await createTask(newTask);
+
+    
+    const taskToEdit: Task = { 
+      id: 1, 
+      title: 'Updated Task', 
+      description: "Updated Description", 
+      category_id: 1, 
+      done: true 
+    };
+
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+    });
+
+    await expect(editTask(taskToEdit)).resolves.toBeUndefined();
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8080/user/1', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(taskToEdit),
+    });
+  });
+
+  it('sollte einen Fehler werfen, wenn PUT fehlschlägt', async () => {
+    const mockTask: Task = { id: 999, title: 'Non-existent Task', description: "Test", category_id: 1, done: false };
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      statusText: 'Not Found',
+    });
+
+    await expect(editTask(mockTask)).rejects.toThrow('Fehler beim Aktualisieren: Not Found');
+  });
+
+  it('sollte Fehler aus catch weiterwerfen', async () => {
+    const mockTask: Task = { id: 1, title: 'Test Task', description: "Test", category_id: 1, done: false };
+
+    (fetch as jest.Mock).mockRejectedValueOnce(new Error('Netzwerkfehler'));
+
+    await expect(editTask(mockTask)).rejects.toThrow('Netzwerkfehler');
+  });
+});
 
