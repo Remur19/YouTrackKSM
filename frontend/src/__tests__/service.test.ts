@@ -1,4 +1,5 @@
-import { createUser, deleteUser, getUser } from "../src/services/api";
+import { createCategory, createTask, createUser, deleteUser, editCategory, editTask, getUser, updateUser } from "../services/api";
+import type { Category, Task, User } from "../types";
 
 
 
@@ -107,7 +108,7 @@ describe('deleteUser', () => {
     });
 
     await expect(deleteUser(1)).resolves.toBeUndefined();
-    expect(fetch).toHaveBeenCalledWith('http://localhost:3000/user/1', { method: 'DELETE' });
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8080/user/1', { method: 'DELETE' });
   });
 
   it('sollte einen Fehler werfen, wenn DELETE fehlschlägt', async () => {
