@@ -1,7 +1,4 @@
 import {getUser, createUser, getAllCategories, BASE_URL} from "../src/services/api";
-import {Category} from "../src/types";
-
-
 
 describe("getUser", () => {
     beforeEach(() => {
@@ -98,40 +95,15 @@ describe("getAllCategories", () => {
     afterEach(() => {
         jest.resetAllMocks();
     });
-    const fakeCategoies :Category[] =[{
-        name: "testCat1",
-        id: 1,
-        user_id: 1
-    }, {
-        name: "testCat2",
-        id: 2,
-        user_id: 2
-    }]
-    let isApiConnected = false;
+
 // Alle API Calls unter den describe
-    beforeAll(async () => {
-        try{await getAllCategories(1);
-            isApiConnected = true;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }catch (e) {
-            isApiConnected = false;
-        }
-    });
-    if(isApiConnected){
+
         test("should get all categories", async () => {
             const categories = await getAllCategories(1);
             jest.fn(getAllCategories)
             expect(categories.length).toBeGreaterThan(0);
             expect(categories[0]).toHaveProperty("name");
             expect(categories[0]).toHaveProperty("user_id");
-        })
-    }else{
-        test("should get all fake categories", async () => {
-            const categories =fakeCategoies;
-            expect(categories.length).toBeGreaterThan(0);
-            expect(categories[0]).toHaveProperty("name");
-            expect(categories[0]).toHaveProperty("user_id");
-            expect(categories[0]).toHaveProperty("id");
         })
         test("check that getAllCategories calls fetch with correct params", async () => {
             await getAllCategories(1);
@@ -153,7 +125,6 @@ describe("getAllCategories", () => {
             await expect(getAllCategories(1))
                 .rejects.toThrow("Fehler beim Abrufen der Kategorien: undefined");
         });
-    }
 
 })
 
