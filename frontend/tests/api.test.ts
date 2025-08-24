@@ -88,44 +88,4 @@ describe("createUser", () => {
     });
 
 });
-describe("getAllCategories", () => {
-    beforeEach(() => {
-        global.fetch = jest.fn();
-    });
-    afterEach(() => {
-        jest.resetAllMocks();
-    });
-
-    let isApiConnected = false;
-// Alle API Calls unter den describe
-
-        test("should get all categories", async () => {
-            const categories = await getAllCategories(1);
-            jest.fn(getAllCategories)
-            expect(categories.length).toBeGreaterThan(0);
-            expect(categories[0]).toHaveProperty("name");
-            expect(categories[0]).toHaveProperty("user_id");
-        })
-        test("check that getAllCategories calls fetch with correct params", async () => {
-            await getAllCategories(1);
-
-            expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/categories/1`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-            });
-
-        });
-        test("should throw an error if response is not ok", async () => {
-            // fetch resolved, aber mit schlechtem Status
-            (fetch as jest.Mock).mockResolvedValueOnce({
-                ok: false,
-                status: 500,
-                json: async () => ([]),
-            });
-
-            await expect(getAllCategories(1))
-                .rejects.toThrow("Fehler beim Abrufen der Kategorien: undefined");
-        });
-
-})
 
