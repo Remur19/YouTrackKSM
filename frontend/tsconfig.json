@@ -10,7 +10,6 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "target": "ES6",
     "strict": true,
     "esModuleInterop": true,
