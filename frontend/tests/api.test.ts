@@ -96,6 +96,7 @@ describe("getAllCategories", () => {
         jest.resetAllMocks();
     });
 
+    let isApiConnected = false;
 // Alle API Calls unter den describe
 
         test("should get all categories", async () => {
@@ -108,7 +109,7 @@ describe("getAllCategories", () => {
         test("check that getAllCategories calls fetch with correct params", async () => {
             await getAllCategories(1);
 
-            expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/categories`, {
+            expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/categories/1`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
