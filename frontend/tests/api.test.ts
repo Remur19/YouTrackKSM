@@ -1,91 +1,82 @@
-import {getUser, createUser, getAllCategories, BASE_URL} from "../src/services/api";
+import {  getAllCategories } from '../src/services/api';
+import {Category} from "../src/types";
 
-describe("getUser", () => {
+//TESTS NIKLAS PANZ:
+describe("getAllCategories", () => {
+    const BASE_URL = 'http://localhost:8080';
+
     beforeEach(() => {
+        global.fetch = jest.fn();
+    });
+    afterEach(() => {
         jest.resetAllMocks();
     });
+    const mockUpCategories:Category[] = [{
+        id: 1,
+        user_id: 1,
+        name: 'Heute',
+    },{
+        id: 2,
+        user_id: 1,
+        name: 'Diese Woche',
+    },{
+        id: 3,
+        user_id: 2,
+        name: 'Dieses Jahr',
+    },{
+        id: 4,
+        user_id: 2,
+        name: 'Videospiele',
+    },{
+        id: 5,
+        user_id: 3,
+        name: 'Musik',
+    },];
+    const user1Categories = mockUpCategories.filter(
+        (category: Category) => category.user_id === 1
+    );
+
+// Alle API Calls unter den describe
+
+    test("should get all categories", async () => {
 
 
-    test("Abfrage erfolgreich", async () => {
-        const userId = "7d4c5a7e-6624-4f53-a9b6-6ffdeef7987b";
-        const mockUser = {id: userId} ;
-
-        global.fetch = jest.fn().mockResolvedValue({
+        (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
             ok: true,
-            json: async () => mockUser,
-        } as Response);
-        
-        //uuid.Parse(userId)
-        const user = await getUser(userId);
-
-        expect(user).toEqual(mockUser);
-        expect(fetch).toHaveBeenCalledWith(`http://localhost:8080/user/${userId}`, {method: "GET"});
-    });
-
-    test("Abfrage nicht erfolgreich", async () => {
-        global.fetch = jest.fn().mockResolvedValue({
-            ok: false,
-            statusText: "Not Found",
+            statusText: 'OK',
+            json: async () => user1Categories,
         } as Response);
 
-        await expect(getUser("7d4c5a7e-6624-4f53-a9b6-6ffdeef7987a"))
-            .rejects
-            .toThrow("Fehler beim Abrufen des Nutzers: Not Found");
-    });
-});
+        const categories = await getAllCategories(1);
 
-describe("createUser", () => {
-    beforeEach(() => {
-        jest.resetAllMocks();
-    });
-
-    test("erstellt einen Nutzer erfolgreich", async () => {
-        const newUser = { name: "Alice", email: "alice@example.com", password: "secret123" };
-        const returnedId = 42;
-
-        global.fetch = jest.fn().mockResolvedValue({
+        expect(categories.length).toBeGreaterThan(0);
+        expect(categories[0]).toHaveProperty("name");
+        expect(categories[0]).toHaveProperty("user_id");
+    })
+    test("check that getAllCategories calls fetch with correct params", async () => {
+        (fetch as jest.Mock).mockResolvedValueOnce({
             ok: true,
             statusText: "OK",
-            json: async () => returnedId,
+            json: async () => [],
         } as Response);
 
-        const result = await createUser(newUser);
+        await getAllCategories(1);
 
-        expect(fetch).toHaveBeenCalledWith(
-            "http://localhost:8080/user",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newUser),
-            }
-        );
-
-        expect(result).toEqual({ ...newUser, id: returnedId });
+        expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/categories/1`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
     });
 
-    test("wirft Fehler, wenn API nicht ok ist", async () => {
-        const newUser = { name: "Bob", email: "bob@example.com", password: "pwd123" };
-
-        global.fetch = jest.fn().mockResolvedValue({
+    test("should throw an error if response is not ok", async () => {
+        // fetch resolved, aber mit schlechtem Status
+        (fetch as jest.Mock).mockResolvedValueOnce({
             ok: false,
-            statusText: "Bad Request",
-            json: async () => ({}),
-        } as Response);
-
-        await expect(createUser(newUser))
-            .rejects
-            .toThrow("Fehler beim Erstellen des Nutzers: Bad Request");
+            status: 500,
+            json: async () => [],
+        });
+        await expect(getAllCategories(2))
+            .rejects.toThrow("Fehler beim Abrufen der Kategorien: undefined");
     });
 
-    test("wirft Fehler bei fetch-Ausnahme", async () => {
-        const newUser = { name: "Eve", email: "eve@example.com", password: "xxx" };
-
-        global.fetch = jest.fn().mockRejectedValue(new Error("Network down"));
-
-        await expect(createUser(newUser))
-            .rejects
-            .toThrow("Network down");
-    });
-
-});
-
+})

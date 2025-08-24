@@ -80,6 +80,7 @@ export async function getAllCategories(userId: number): Promise<Category[]> { //
     try {
         const response = await fetch(`${BASE_URL}/categories/${userId}`, {
             method: 'GET',
+            headers: { "Content-Type": "application/json" },
         });
         if (!response.ok) {
             throw new Error(`Fehler beim Abrufen der Kategorien: ${response.statusText}`);
