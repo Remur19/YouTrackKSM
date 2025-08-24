@@ -10,12 +10,12 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "target": "ES6",
     "strict": true,
     "esModuleInterop": true,
     "outDir": "dist",
-    "types": ["jest", "@testing-library/jest-dom", "node"]
+    "types": ["jest", "node"],
+    "jsx": "react-jsx"
   },
   "include": ["src", "__tests__","vite.config.ts", "@testing-library/jest-dom"]
 }
