@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Textfield from './Textfield';
+import Textfield from '../components/Textfield';
 
 describe('Textfield', () => {
   test('allows typing and clearing the input', async () => {
